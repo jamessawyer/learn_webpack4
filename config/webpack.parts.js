@@ -55,3 +55,20 @@ exports.extractCSS = ({ include, exclude, use = [] }) => {
     plugins: [plugin],
   };
 };
+
+// 图片处理
+exports.loadImages = ({ include, exclude, options } = {}) => ({
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpg)$/,
+        include,
+        exclude,
+        use: {
+          loader: 'url-loader',
+          options,
+        },
+      },
+    ],
+  },
+});

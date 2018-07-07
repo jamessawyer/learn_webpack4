@@ -1,8 +1,15 @@
 :root {
-  --mainbg: red;
+  --mainbg: cornsilk;
 }
 
 body {
   background: var(--mainbg);
   display: flex;
+  align-content: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: url('./logo.jpg');
+  /* background-image: url('./sneaker.jpg'); */
+  background-repeat: no-repeat;
+  background-position: center;
 }

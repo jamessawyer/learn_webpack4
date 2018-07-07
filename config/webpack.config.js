@@ -30,6 +30,13 @@ const productionConfig = merge([
       },
     ],
   }),
+  // production时 对小于 15000字节的图片进行内联
+  parts.loadImages({
+    options: {
+      limit: 15000,
+      name: '[name].[ext]',
+    },
+  }),
 ]);
 
 const developmentConfig = merge([
@@ -38,6 +45,7 @@ const developmentConfig = merge([
     port: process.env.PORT,
   }),
   parts.loadCSS(),
+  parts.loadImages(),
 ]);
 
 module.exports = mode => {
