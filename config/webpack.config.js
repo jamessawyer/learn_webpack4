@@ -13,6 +13,7 @@ const commonConfig = merge([
     ],
   },
   parts.loadJS({ include: path.resolve(__dirname, 'src') }),
+  parts.generateSourceMaps({ type: 'source-map' }),
 ]);
 
 // const productionConfig = merge([
@@ -39,6 +40,26 @@ const productionConfig = merge([
       name: '[name].[ext]',
     },
   }),
+  {
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          commons: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendor',
+            chunks: 'initial',
+          },
+        },
+      },
+    },
+  },
+  // {
+  //   optimization: {
+  //     splitChunks: {
+  //       chunks: 'initial',
+  //     },
+  //   },
+  // },
 ]);
 
 const developmentConfig = merge([

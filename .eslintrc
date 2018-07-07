@@ -8,5 +8,8 @@
     "mocha": true,
     "jest": true,
     "jasmine": true
+  },
+  "parserOptions": {
+    "allowImportExportEverywhere": true
   }
 }
