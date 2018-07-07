@@ -85,3 +85,8 @@ exports.loadImages = ({ include, exclude, options } = {}) => ({
     ],
   },
 });
+
+// 处理sourceMap
+exports.generateSourceMaps = ({ type }) => ({
+  devtool: type,
+});
