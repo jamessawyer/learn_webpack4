@@ -1,5 +1,6 @@
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
 
 const parts = require('./webpack.parts');
 
@@ -11,6 +12,7 @@ const commonConfig = merge([
       }),
     ],
   },
+  parts.loadJS({ include: path.resolve(__dirname, 'src') }),
 ]);
 
 // const productionConfig = merge([

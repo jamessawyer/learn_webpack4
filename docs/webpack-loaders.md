@@ -322,3 +322,36 @@ const src = require(`./avatars/${avatar}`);
   },
 },
 ```
+
+## babel 相关的loaders和插件
+
+  - **`babel-plugin-import`**: 重写模块引入。比如可以以这种形式引入： **`import { Button } from 'antd'`**,而不是通过特定的路径指向模块
+  - **`babel-plugin-import-asserts`**: 推断你的引入是否已经定义
+  - **`babel-plugin-syntax-trailing-function-commas`**: 给函数添加尾部逗号,没什么用
+  - **`babel-plugin-webpack-loaders`**: 允许通过babel使用特定的webpack loaders
+  - **`babel-plugin-transform-react-remove-prop-types`**: 允许在production build中移除 **`propType`** 相关的代码
+
+使用babel **`env`** 属性来指定在不同环境使用不同的presets和plugins, [babel option env参数](https://babeljs.io/docs/en/babelrc/#env-option)
+```
+# .babelrc
+# 'env' 会同时检测 'NODE_ENV' 和 'BABEL_ENV'
+# 'BABEL_ENV' 会覆盖 'NODE_ENV' 的设置
+{
+  ...
+  "env": {
+    "development": {
+      "plugins": [
+        "annotate-console-log"
+      ]
+    },
+    "production": {
+      "plugins": [
+        "transform-react-constant-elements"
+      ]
+    }
+  }
+}
+```
+  
+
+
