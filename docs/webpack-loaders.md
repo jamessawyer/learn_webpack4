@@ -279,3 +279,46 @@ const src = require(`./avatars/${avatar}`);
 
 如果使用图片，并且css-loader中的 **`sourceMap`** 开启，则必须将 **`output.publicPath`** 设置为一个绝对值指向开发服务器，否则图片将不会正常工作，相关issue连接
   - [Generated image urls *must* be absolute for style!css?sourceMap to work? #55](https://github.com/webpack-contrib/style-loader/issues/55)
+
+
+> 字体加载
+
+```
+// 使用file-loader
+{
+  test: /\.(tff|eot|woff|woff2)$/,
+  use: {
+    loader: 'file-loader',
+    options: {
+      name: 'fonts/[name].[ext]', // 将字体存放在 fonts 文件夹中
+    },
+  },
+}
+
+// 然后css定义字体
+// 想要优先使用的字体放在最前面，比如woff2优先考虑
+@font-face {
+  font-family: "myfontfamily";
+  src: url("./fonts/myfontfile.woff2") format("woff2"),
+    url("./fonts/myfontfile.woff") format("woff"),
+    url("./fonts/myfontfile.eot") format("embedded-opentype"),
+    url("./fonts/myfontfile.ttf") format("truetype");
+    /* Add other formats as you see fit */
+}
+
+
+// 使用url-loader 产生内联样式
+{
+  // Match woff2 and patterns like .woff?v=1.1.1.
+  test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/,
+  use: {
+    loader: "url-loader",
+    options: {
+      limit: 50000, // 50kb内联 否则产生单独的文件
+      mimetype: "application/font-woff",
+      name: "./fonts/[name].[ext]", // Output below ./fonts
+      publicPath: "../", // Take the directory into account
+    },
+  },
+},
+```
