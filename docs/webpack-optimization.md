@@ -214,3 +214,61 @@ const productionConfig = merge([
 ```
 
 **有一个问题就是，如果改变了应用的代码，会导致vendor hash也会产生变化，这需要对 `manifest` 进行提取**
+
+
+## 4.提取manifest
+
+manifest是告诉webpack该如何加载文件的，可以单独提取出来， **然后内联在`index.html`中**，这样避免manifest添加到别的bundle中，要等bundle完全加载完成之后才执行manifest, 这可以提升加载速度。
+
+可以在production配置中，在 **`optimization.runtimeChunk`** 中设置来提取manifest:
+```
+const productionConfig = merge([
+  ...
+  {
+    optimization: {
+      splitChunks: {
+        ...
+      },
+      runtimeChunk: {
+        name: 'manifest', // 规范一般是 'manifest', 但是其它任意名字也可以
+      }
+    }
+  }
+])
+```
+yarn run buid
+```
+# 没有manifest
+                             Asset       Size  Chunks             Chunk Names
+         0.1860b32cb90834a0fd63.js  186 bytes       0  [emitted]
+    vendor.fcc779f3afbf34b9984b.js   98.9 KiB       1  [emitted]  vendor
+     main.f18d173b852d38e6f15a.css   12.8 KiB       2  [emitted]  main
+      main.0e6f2c39b27b334c944b.js   2.55 KiB       2  [emitted]  main
+     0.1860b32cb90834a0fd63.js.map  226 bytes       0  [emitted]
+vendor.fcc779f3afbf34b9984b.js.map    238 KiB       1  [emitted]  vendor
+  main.0e6f2c39b27b334c944b.js.map   12.7 KiB       2  [emitted]  main
+                        index.html  339 bytes          [emitted]
+
+# 提取manifest
+                               Asset       Size  Chunks             Chunk Names
+           0.1860b32cb90834a0fd63.js  186 bytes       0  [emitted]
+    manifest.c3dd9dfe597dd64742f9.js   2.24 KiB       1  [emitted]  manifest
+      vendor.3ad1ee8cb1ba05829b10.js   98.9 KiB       2  [emitted]  vendor
+       main.f18d173b852d38e6f15a.css   12.8 KiB       3  [emitted]  main
+        main.15af7292a23467c20d33.js  428 bytes       3  [emitted]  main
+       0.1860b32cb90834a0fd63.js.map  226 bytes       0  [emitted]
+manifest.c3dd9dfe597dd64742f9.js.map   11.7 KiB       1  [emitted]  manifest
+  vendor.3ad1ee8cb1ba05829b10.js.map    238 KiB       2  [emitted]  vendor
+    main.15af7292a23467c20d33.js.map   1.12 KiB       3  [emitted]  main
+                          index.html  418 bytes          [emitted]
+```
+可以看出来 **`manifest.js`** 从 **`main.js`** 里面被提取出来了.
+
+因为我们使用了 **`HtmlWebpackPlugin`**,我们不必自己亲自添加manifest，这个插件将自动添加manifest引用到index.html中.
+
+可以配合**`HtmlWebpackPlugin`**使用以下任意一种插件，可以将manifest内联到html中，这样可以避免一次请求：
+  - **`[assets-webpack-plugin 下载量第1](https://www.npmjs.com/package/assets-webpack-plugin)`**
+  - **`[inline-manifest-webpack-plugin 下载量第2](https://www.npmjs.com/package/inline-manifest-webpack-plugin)`**
+  - **`[html-webpack-inline-chunk-plugin 下载量第3](https://www.npmjs.com/package/html-webpack-inline-chunk-plugin)`**
+
+**可以将比较流行的依赖，比如`React`, 采用CDN的形式，这样可以减小`vendor`的bundle尺寸**

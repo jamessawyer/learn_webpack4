@@ -60,6 +60,7 @@ const productionConfig = merge([
     },
   }),
   {
+    // 优化
     optimization: {
       splitChunks: {
         cacheGroups: {
@@ -69,6 +70,9 @@ const productionConfig = merge([
             chunks: 'initial',
           },
         },
+      },
+      runtimeChunk: {
+        name: 'manifest', // 提取manifest
       },
     },
   },

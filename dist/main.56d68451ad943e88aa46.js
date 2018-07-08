@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[3],{5:function(n,e,t){"use strict";t.r(e);t(4),t(15),t(7);document.body.appendChild(((n="hello angle")=>{const e=document.createElement("div");return e.innerHTML=n,e.onclick=(()=>t.e(0).then(t.bind(null,17)).then(n=>{e.textContent=n.default}).catch(n=>{console.log("懒加载出错了",n)})),e})("time machine"))},7:function(n,e,t){}},[[5,1,2]]]);
+//# sourceMappingURL=main.56d68451ad943e88aa46.js.map
