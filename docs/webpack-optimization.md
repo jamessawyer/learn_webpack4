@@ -272,3 +272,28 @@ manifest.c3dd9dfe597dd64742f9.js.map   11.7 KiB       1  [emitted]  manifest
   - **`[html-webpack-inline-chunk-plugin 下载量第3](https://www.npmjs.com/package/html-webpack-inline-chunk-plugin)`**
 
 **可以将比较流行的依赖，比如`React`, 采用CDN的形式，这样可以减小`vendor`的bundle尺寸**
+
+
+## 5.开启性能budget
+
+webpack 允许定义performance budget,这样对打包尺寸可以进行约束，这个功能默认是被禁用的。
+
+```
+// 实际应用中这个限制会放低一点 这样允许尺寸更大
+const productionConfig = merge([
+  {
+    performance: {
+      hints: 'warning', // 'error' | 'warning' | false
+      maxEntrypointSize: 50000, // 单位bytes, 默认值是250k
+      maxAssetSize: 45000, // 单位bytes
+    },
+  },
+])
+```
+
+分析工具：
+  - [WEBPACK VISUALIZER](https://chrisbateman.github.io/webpack-visualizer/)
+  - [webpack-bundle-analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer)
+  - [Webpack Chart](https://alexkuz.github.io/webpack-chart/)
+
+  
