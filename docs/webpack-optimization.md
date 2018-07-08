@@ -296,4 +296,50 @@ const productionConfig = merge([
   - [webpack-bundle-analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer)
   - [Webpack Chart](https://alexkuz.github.io/webpack-chart/)
 
-  
+
+## 6.性能
+
+性能优化相关的几个点：
+  1.知道要优化什么
+  2.能快速优化的先优化
+  3.然后再进行更多的优化
+  4.测量影响
+
+### 6.1 高级别的优化
+
+因为webpack默认是使用单个实例的，因此不能享受多核处理器带来的好处。可以使用下面2个插件进行优化：
+  1.[parallel-webpack](https://www.npmjs.com/package/parallel-webpack)
+  2.[HappyPack](https://www.npmjs.com/package/happypack)
+
+以 **HappyPack** 为例：
+
+```
+# 安装
+yarn add -D happypack
+
+# 使用
+# webpack.config.js
+const HappyPack = require('happypack');
+
+const commonConfig = merge([{
+  plugins: [
+    new HappyPack({
+      loaders: [
+        'babel-loader', // HappyPack将捕获 babel-loader
+      ]
+    })
+  ]
+}])
+
+# 将原来的babel loader替换为 happypack对应的loader
+exports.loadJS = ({ include, exclude }) => ({
+  module: {
+    rules: [
+      {
+        // loader: 'babel-loader', // 原来的babel-loader使用happypack提供的相应loader替换
+        loader: 'happypack/loader',
+      }
+    ]
+  }
+})
+```

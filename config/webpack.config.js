@@ -1,6 +1,7 @@
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PostcssSafeParser = require('postcss-safe-parser');
+const HappyPack = require('happypack');
 
 const parts = require('./webpack.parts');
 const PATHS = require('./paths');
@@ -10,6 +11,12 @@ const commonConfig = merge([
     plugins: [
       new HtmlWebpackPlugin({
         title: 'webpack demo',
+      }),
+      new HappyPack({
+        // https://www.npmjs.com/package/happypack
+        id: 'js',
+        threads: 4,
+        loaders: ['babel-loader'], // HappyPack捕获babel-loader
       }),
     ],
   },

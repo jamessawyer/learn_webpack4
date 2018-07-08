@@ -21,7 +21,9 @@ exports.loadJS = ({ include, exclude } = {}) => ({
         test: /\.js/,
         include,
         exclude,
-        use: 'babel-loader',
+        // use: 'babel-loader',
+        // id=js 对应webpack.config.js中HappyPack对应的id
+        use: 'happypack/babel-loader?id=js', // 使用HappyPack提供的babel-loader
       },
     ],
   },
