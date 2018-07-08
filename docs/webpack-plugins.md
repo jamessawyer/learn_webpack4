@@ -97,3 +97,35 @@ module.exports = {
 可以使webpack输出更加的醒目：
   - **`friendly-errors-webpack-plugin`**: 提升webpack错误报告，可以捕获常见错误，以友好的方式显示
   - **`webpack-dashboard`**: 完整的基于命令行的显示工具
+
+
+## clean-webpack-plugin 清理目录
+
+```
+yarn add -D clean-webpack-plugin
+```
+这个用来清理目录：
+
+```
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+
+/*
+ * path {string} 要被清理的路径
+ */
+exports.clean = path => ({
+  plugins: [new CleanWebpackPlugin([path])],
+});
+```
+
+## copy-webpack-plugin
+
+复制单个文件或者整个目录到build目录
+[copy-webpack-plugin - webpack docs](https://webpack.docschina.org/plugins/copy-webpack-plugin/)
+
+使用方式：
+```
+/*
+ * pattern {object} 从哪里复制到哪里 {from: 'source', to: 'dest'}
+ */
+new CopyWebpackPlugin([patterns], options)
+```

@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // 开发配置
 exports.devServer = ({ host, port } = {}) => ({
@@ -89,4 +90,9 @@ exports.loadImages = ({ include, exclude, options } = {}) => ({
 // 处理sourceMap
 exports.generateSourceMaps = ({ type }) => ({
   devtool: type,
+});
+
+// 清理目录
+exports.clean = path => ({
+  plugins: [new CleanWebpackPlugin([path])],
 });

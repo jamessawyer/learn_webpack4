@@ -1,8 +1,8 @@
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
 
 const parts = require('./webpack.parts');
+const PATHS = require('./paths');
 
 const commonConfig = merge([
   {
@@ -12,7 +12,7 @@ const commonConfig = merge([
       }),
     ],
   },
-  parts.loadJS({ include: path.resolve(__dirname, 'src') }),
+  parts.loadJS({ include: PATHS.app }),
   parts.generateSourceMaps({ type: 'source-map' }),
 ]);
 
@@ -22,6 +22,7 @@ const commonConfig = merge([
 //   }),
 // ]);
 const productionConfig = merge([
+  parts.clean(PATHS.build),
   parts.extractCSS({
     use: [
       'css-loader',
