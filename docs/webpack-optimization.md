@@ -133,3 +133,84 @@ const productionConfig = merge([
 ### 1.4 压缩图片
 
 一般使用 [imagemin-webpack-plugin](https://www.npmjs.com/package/imagemin-webpack-plugin) 对图片资源进行压缩
+
+
+## 2.设置环境变量
+webpack4之前使用 **`DefinePlugin`** 对 **`process.env.NODE_ENV`** 进行设置不同的变量，webpack4使用 **`mode`** 字段来定义不同的环境变量
+
+
+## 3.设置Hash
+
+如果不设置hash,客户端不知道如何利用缓存，不能告诉客户端文件发生了改变
+
+webpack使用占位符的形式设置hash:
+  - **`[id]`**: 返回块的id
+  - **`[path]`**: 返回文件的路径
+  - **`[ext]`**: 返回扩展，这个对大多数文件都有效，但是 **MiniCssExtractPlugin** 则是这个规则的一个意外
+  - **`[hash]`**: 返回build hash,如果build中发生了改变，hash也会改变
+  - **`[chunkhash]`**: 返回一个入口 **chunk-specific** hash.配置中定义的每一个 **`entry`** 都会接受一个自己的hash,如果入口的某部分发生了改变，hash也会改变，**`[chunkhash]`** 比 **`[hash]`** 更加的精细
+  - **`[contenthash]`**: 依据content产生的hash
+
+一般只在production阶段使用 **[hash]** 和 **[chunkhash]**,开发时一般不使用使用hash
+
+可以只取部分hash和chunkhash： **`[chunkhash:4]`** 表示只取chunkhash的前4位
+
+注意，对提取之后的CSS文件（一般是使用 MiniCssExtractPlugin） **`contenthash`**, 如果使用 **`chunkhash`** 会导致css和js文件失效
+
+```
+# css使用hash
+exports.extractCSS = ({ include, exclude, use = [] }) => {
+  // 将提取的CSS生成一个文件
+  const plugin = new MiniCssExtractPlugin({
+    // filename: '[name].css', // 未使用hash
+    filename: '[name].[contenthash].css', // 使用contenthash 
+  });
+
+  return {
+    module: {
+      rules: [
+        {
+          test: /\.css$/,
+          include,
+          exclude,
+          use: [MiniCssExtractPlugin.loader].concat(use),
+        },
+      ],
+    },
+    plugins: [plugin],
+  };
+};
+
+# js使用hash
+const productionConfig = merge([
+  {
+    output: {
+      chunkFilename: '[name].[chunkhash].js',
+      filename: '[name].[chunkhash].js',
+    },
+  },
+  // ...
+]
+
+# 图片使用hash
+const productionConfig = merge([
+  {
+    output: {
+      chunkFilename: '[name].[chunkhash].js',
+      filename: '[name].[chunkhash].js',
+    },
+  },
+  // ...
+  // production时 对小于 15000字节的图片进行内联
+  parts.loadImages({
+    options: {
+      limit: 15000,
+      // name: '[name].[ext]', // 不使用hash
+      name: '[name].[hash].[ext]', // 使用hash
+    },
+  }),
+  // ...
+]);
+```
+
+**有一个问题就是，如果改变了应用的代码，会导致vendor hash也会产生变化，这需要对 `manifest` 进行提取**

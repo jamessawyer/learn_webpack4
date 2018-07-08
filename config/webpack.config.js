@@ -23,6 +23,12 @@ const commonConfig = merge([
 //   }),
 // ]);
 const productionConfig = merge([
+  {
+    output: {
+      chunkFilename: '[name].[chunkhash].js',
+      filename: '[name].[chunkhash].js',
+    },
+  },
   parts.clean(PATHS.build),
   parts.extractCSS({
     use: [
@@ -50,7 +56,7 @@ const productionConfig = merge([
   parts.loadImages({
     options: {
       limit: 15000,
-      name: '[name].[ext]',
+      name: '[name].[hash].[ext]',
     },
   }),
   {

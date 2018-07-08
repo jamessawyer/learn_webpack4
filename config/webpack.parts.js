@@ -64,7 +64,7 @@ exports.minifyCSS = ({ options }) => ({
 exports.extractCSS = ({ include, exclude, use = [] }) => {
   // 将提取的CSS生成一个文件
   const plugin = new MiniCssExtractPlugin({
-    filename: '[name].css',
+    filename: '[name].[contenthash].css',
   });
 
   return {
@@ -106,5 +106,11 @@ exports.generateSourceMaps = ({ type }) => ({
 
 // 清理目录
 exports.clean = path => ({
-  plugins: [new CleanWebpackPlugin([path])],
+  plugins: [
+    // https://www.npmjs.com/package/clean-webpack-plugin
+    new CleanWebpackPlugin([path], {
+      verbose: true,
+      allowExternal: true, // 允许插件清理webpack所在目录外的目录，默认为false
+    }),
+  ],
 });
