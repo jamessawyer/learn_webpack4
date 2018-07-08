@@ -1,4 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const cssnano = require('cssnano');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // 开发配置
@@ -46,6 +48,16 @@ exports.loadCSS = ({ include, exclude } = {}) => ({
       },
     ],
   },
+});
+// 压缩css代码
+exports.minifyCSS = ({ options }) => ({
+  plugins: [
+    new OptimizeCSSAssetsPlugin({
+      cssProcessor: cssnano,
+      cssProcessorOptions: options,
+      canPrint: false, // webpack代码分析中使用 '--json' 需要这个设置为false
+    }),
+  ],
 });
 
 // 提取CSS

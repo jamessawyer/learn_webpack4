@@ -119,7 +119,7 @@ exports.clean = path => ({
 
 ## copy-webpack-plugin
 
-复制单个文件或者整个目录到build目录
+复制单个文件或者整个目录到build目录，多多页应用十分有用
 [copy-webpack-plugin - webpack docs](https://webpack.docschina.org/plugins/copy-webpack-plugin/)
 
 使用方式：

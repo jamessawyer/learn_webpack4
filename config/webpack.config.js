@@ -1,5 +1,6 @@
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const PostcssSafeParser = require('postcss-safe-parser');
 
 const parts = require('./webpack.parts');
 const PATHS = require('./paths');
@@ -33,6 +34,17 @@ const productionConfig = merge([
         },
       },
     ],
+  }),
+  parts.minifyCSS({
+    options: {
+      discardComments: {
+        removeAll: true,
+      },
+      // 使cssnano以 safe模式运行
+      // 避免错误的转换
+      // safe: true, // 已经被废弃 使用postcss需要特别的parser
+      parser: PostcssSafeParser,
+    },
   }),
   // production时 对小于 15000字节的图片进行内联
   parts.loadImages({
